@@ -11,5 +11,4 @@ Contains the csv files that resemble the relational database of Clean_Tweets_All
 Has the following files:
 * Tweet Database - Contains all the information about each tweet
 * Location Database - Contains all the information about each location
-* Author Database - Contains all the information specfic to each author
 * Relational Database - Contains the relations between all the above databases
