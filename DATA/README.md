@@ -6,8 +6,14 @@ Raw data contianing the tweets from the API
 ### Clean_Tweets_All_Info.csv 
 Is the csv file that stores all the information scraped from the twitter API and the information created when cleaning the tweets. 
 
+### MISC 
+Temporary csv files for saving progress during testing and running of a ipynb file
+
 ### ACLED
 Contains the ACLED data of all the protests
+
+### ZA_SHAPES
+Contains the shape files of South Africa, Provinces, Districts and Munuciplaities
 
 ### Relational_Databases Folder
 Contains the csv files that resemble the relational database of Clean_Tweets_All_Info.csv 
