@@ -6,6 +6,9 @@ Raw data contianing the tweets from the API
 ### Clean_Tweets_All_Info.csv 
 Is the csv file that stores all the information scraped from the twitter API and the information created when cleaning the tweets. 
 
+### ACLED
+Contains the ACLED data of all the protests
+
 ### Relational_Databases Folder
 Contains the csv files that resemble the relational database of Clean_Tweets_All_Info.csv 
 Has the following files:
