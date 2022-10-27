@@ -13,6 +13,8 @@ import datetime
 import numpy as np
 from cmath import nan
 
+########################## Scraping Functions#############################
+
 def set_client(bearer_token):
     client = tweepy.Client(bearer_token, wait_on_rate_limit=True)
     return client
@@ -87,10 +89,14 @@ def populate_df(protest_tweets):
     return df
 
 
+########################## Cleaning Functions#############################
+
+
 
 
 ################# MAIN METHOD ####################
 
+################ Scrape Tweets####################
 bearer_token = 'AAAAAAAAAAAAAAAAAAAAAEGchQEAAAAAZSYFv1nyLDV81YAKEfDr1fVrlho%3DWKBvyLhQ4CeHrlBRtecAetYkB1ZnAjI3Zydb1516fkIzKhS4vh'
 
 
@@ -104,3 +110,5 @@ scrape_tweets = populate_df(protest_tweets=protest_tweets)
 print('Scraped Dataframe Dimenesions: ', scrape_tweets.shape, '(rows,columns)')
 print(scrape_tweets.head())
 scrape_tweets.to_csv('DATA/scrape_tweets.csv')
+
+################ Clean Tweets####################
