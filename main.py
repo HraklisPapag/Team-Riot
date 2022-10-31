@@ -457,12 +457,15 @@ def change_coords():
                 new_geometry = Point(new_long,new_lat)
                 tweets['geometry'][iter_t] = new_geometry
 
+########################## ACLED Functions #############################
 
+def string_to_date(date_str):
+    date_time_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+    return date_time_obj
 
+#############################################################################################################
 ################################################ MAIN METHOD ################################################
-
-
-
+#############################################################################################################
 
 
 ################################ Create Query ################################
@@ -472,168 +475,185 @@ query = create_query(query_df)
 
 ################################ Initialise Protest ################################
 
-protests = pd.read_csv('DATA/Student Protests.csv')
+protests_origin = pd.read_csv('DATA/Student Protests.csv')
+protests_origin.drop('Unnamed: 0', axis =1, inplace =True)
+protests_origin['event_date'] = protests_origin['event_date'].apply(lambda x: string_to_date(x))
+
+protests = protests_origin.head(10)
+print(protests)
 
 
+for iter_p, protest in protests.iterrows():
+    date = protest['event_date']
+    date_before = date - datetime.timedelta(days=1)
+    date_after = date + datetime.timedelta(days=1)
+
+    directory = str(date_before.strftime("%Y-%m-%d")) + ' - ' + str(date_after.strftime("%Y-%m-%d")) + ' - ' + str(protest['data_id'])
+
+    parent_dir = 'DATA/Tweets-Protests/'
+
+    path = os.path.join(parent_dir, directory)
+
+    os.mkdir(path)
+    
+
+    ################################ Scrape Tweets ################################
+    bearer_token = 'AAAAAAAAAAAAAAAAAAAAAEGchQEAAAAAZSYFv1nyLDV81YAKEfDr1fVrlho%3DWKBvyLhQ4CeHrlBRtecAetYkB1ZnAjI3Zydb1516fkIzKhS4vh'
+
+    start_date = date_before
+    end_date = date_after
+
+    protest_tweets = input_query(query=query, start_date=start_date, end_date=end_date, client=set_client(bearer_token))
+    scrape_tweets = populate_df(protest_tweets=protest_tweets)
+    # scrape_tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Scrape Tweets.csv')
+
+    ################################ Clean Tweets ################################
+
+    tweets = scrape_tweets
+
+    # tweets.drop_duplicates(keep = False, inplace = True)
+    tweets.dropna(subset = ['text'], inplace = True)
+
+    tweets['mentioned_users'] = tweets['text'].apply(lambda x: mentioned_users(x))
+    tweets.head()
+
+    tweets['hashtags'] = tweets['text'].apply(lambda x: hashtags(x))
+    tweets.head()
+
+    tweets['emojis'] = tweets['text'].apply(lambda x: extract_emojis(x))
+    tweets.head()
+
+    tweets['urls'] = tweets['text'].apply(lambda x: find_urls(x))
+    tweets.head()
+
+    tweets['cleaned_text'] = tweets['text'].apply(lambda x: clean_text(x))
+    tweets.head()
+
+    # tweets['coords'] = tweets['bbox'].apply(lambda x: bbox_to_coords(x))
+    tweets['coords'] = tweets['bbox']
+
+    tweets['longitude_1'] = tweets['coords'].apply(lambda x: x[0])
+    tweets['latitude_1'] = tweets['coords'].apply(lambda x: x[1])
+    tweets['longitude_2'] = tweets['coords'].apply(lambda x: x[2])
+    tweets['latitude_2'] = tweets['coords'].apply(lambda x: x[3])
+
+    tweets.drop('bbox', axis=1, inplace=True)
+
+    tweets['centroid'] = tweets['coords'].apply(lambda x: find_centroid(x))
+
+    tweets['centroid_long'] = tweets['centroid'].apply(lambda z: z.x)
+    tweets['centroid_lat'] = tweets['centroid'].apply(lambda z: z.y)
+
+    tweets.drop('centroid', axis =1, inplace=True)
+
+    # Edge cases
+    tweets.loc[tweets.place_name == 'Cape Town, South Africa', ['centroid_long', 'centroid_lat']] = 18.4241, -33.9249
+    tweets.loc[tweets.place_name == 'Mdumbi Beach', ['centroid_long', 'centroid_lat']] = 29.215369, -31.933896
+    tweets.loc[tweets.place_name == "Betty's Bay, South Africa", ['centroid_long', 'centroid_lat']] = 18.92051, -34.34747
+    tweets.loc[tweets.place_name == 'Bloubergstrand', ['centroid_long', 'centroid_lat']] = 18.46173, -33.800418
+
+    geometry = [Point(xy) for xy in zip(tweets['centroid_long'], tweets['centroid_lat'])]
+    gdf = GeoDataFrame(tweets, geometry=geometry)  
+
+    tweets.drop('longitude_1', axis=1, inplace=True)
+    tweets.drop('longitude_2', axis=1, inplace=True)
+    tweets.drop('latitude_1', axis=1, inplace=True)
+    tweets.drop('latitude_2', axis=1, inplace=True)
+    tweets.drop('centroid_long', axis=1, inplace=True)
+    tweets.drop('centroid_lat', axis=1, inplace=True)
+
+    tweets = tweets[tweets['place_name'] != 'South Africa']
+
+    tweets.drop('coords', axis=1, inplace=True)
+
+    # tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Clean Tweets.csv')
+
+    ################################ Content Analysis ################################
+
+    tweets['grievances'] = content_analysis(grievances)
+    tweets['grievances'] = tweets['grievances'].apply(lambda x: unique_list(x))
+
+    tweets['triggers'] = content_analysis(triggers)
+    tweets['triggers'] = tweets['triggers'].apply(lambda x: unique_list(x))
+
+    tweets['tactics'] = content_analysis(tactics)
+    tweets['tactics'] = tweets['tactics'].apply(lambda x: unique_list(x))
+
+    tweets['actors'] = content_analysis(actors)
+    tweets['actors'] = tweets['actors'].apply(lambda x: unique_list(x))
+
+    tweets['locations'] = content_analysis(locations)
+    tweets['locations'] = tweets['locations'].apply(lambda x: unique_list(x))
+
+    tweets['weapons'] = content_analysis(weapons)
+    tweets['weapons'] = tweets['weapons'].apply(lambda x: unique_list(x))
+
+    tweets['eventualities'] = content_analysis(eventualities)
+    tweets['eventualities'] = tweets['eventualities'].apply(lambda x: unique_list(x))
+
+    tweets['curiosities'] = content_analysis(curiosities)
+    tweets['curiosities'] = tweets['curiosities'].apply(lambda x: unique_list(x))
+
+    tweets['non_protests'] = content_analysis(non_protests)
+    tweets['non_protests'] = tweets['non_protests'].apply(lambda x: unique_list(x))
+
+    # tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Tweet Content.csv')
+
+    content_table = pd.read_excel('DATA/Protest is SA   SAS rules V2 - Separated.xlsx')
+    content_table = content_table.drop('Phrases', axis =1)
+    content_table = content_table.drop('Conditional_Phrases', axis =1)
+    content_table = content_table.drop('Afrikaans_Phrases', axis =1)
+    content_table = content_table.drop('Rule', axis =1)
+    content_table['Occurances'] = 0
+
+    count_occurances('grievances', 'Grievance')
+    count_occurances('triggers', 'Trigger')
+    count_occurances('tactics', 'Tactic')
+    count_occurances('actors', 'Actors')
+    count_occurances('locations', 'Location')
+    count_occurances('weapons', 'Weapons')
+    count_occurances('eventualities', 'Eventuality')
+    count_occurances('curiosities', 'Curiosity')
+    count_occurances('non_protests', 'Non-protest')
+
+    # content_table.to_csv('DATA/Tweets-Protests/' + directory + '/Content Table.csv')
+
+    total = len(tweets)
+    frequency_table = content_table.groupby('Label').Occurances.sum().reset_index()
+    frequency_table['Frequency'] = frequency_table['Occurances'].apply(lambda x: round((x/total)*100,2))
+
+    # frequency_table.to_csv('DATA/Tweets-Protests/' + directory + '/Frequency Table.csv')
 
 
+    ################################ Sentiment Analysis ################################
+
+    text = tweets['text'].tolist()
+    text = pd.DataFrame(text, columns = ['Text'])
+
+    text['Text']=text['Text'].apply(cleanTxt)
+
+    text['Subjectivity'] = text['Text'].apply(getSubjectivity)
+    text['Polarity'] = text['Text'].apply(getPolarity)
+    text['Analysis'] = text['Polarity'].apply(getAnalysis)
 
 
-################################ Scrape Tweets ################################
-bearer_token = 'AAAAAAAAAAAAAAAAAAAAAEGchQEAAAAAZSYFv1nyLDV81YAKEfDr1fVrlho%3DWKBvyLhQ4CeHrlBRtecAetYkB1ZnAjI3Zydb1516fkIzKhS4vh'
+    text.drop(['Text'], axis = 1, inplace = True)
 
-start_date = datetime.datetime(2017,10,24)
-end_date = datetime.datetime(2017,10,26)
+    tweets = pd.concat([tweets, text.reindex(tweets.index)], axis = 1)
 
-protest_tweets = input_query(query=query, start_date=start_date, end_date=end_date, client=set_client(bearer_token))
-scrape_tweets = populate_df(protest_tweets=protest_tweets)
-scrape_tweets.to_csv('DATA/Scrape Tweets.csv')
+    # tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Tweet Sentiment.csv')
 
-################################ Clean Tweets ################################
+    ##################################### University Locations #####################################
 
-tweets = scrape_tweets
+    universities = pd.read_excel('DATA/South African Universities.xlsx')
+    universities['Nickname'] = universities['Nickname'].apply(lambda x: split_string(x))
+    universities['Abbriviation'] = universities['Abbriviation'].apply(lambda x: split_string(x))
+    tweets['universities'] = university_locator()
 
-# tweets.drop_duplicates(keep = False, inplace = True)
-tweets.dropna(subset = ['text'], inplace = True)
+    change_coords()
 
-tweets['mentioned_users'] = tweets['text'].apply(lambda x: mentioned_users(x))
-tweets.head()
+    # tweets.to_csv('DATA/Tweets-Protests/' + directory +  '/University_Locations.csv')
 
-tweets['hashtags'] = tweets['text'].apply(lambda x: hashtags(x))
-tweets.head()
+    ##################################### Pair Tweet Data to single Protest #####################################
 
-tweets['emojis'] = tweets['text'].apply(lambda x: extract_emojis(x))
-tweets.head()
-
-tweets['urls'] = tweets['text'].apply(lambda x: find_urls(x))
-tweets.head()
-
-tweets['cleaned_text'] = tweets['text'].apply(lambda x: clean_text(x))
-tweets.head()
-
-# tweets['coords'] = tweets['bbox'].apply(lambda x: bbox_to_coords(x))
-tweets['coords'] = tweets['bbox']
-
-tweets['longitude_1'] = tweets['coords'].apply(lambda x: x[0])
-tweets['latitude_1'] = tweets['coords'].apply(lambda x: x[1])
-tweets['longitude_2'] = tweets['coords'].apply(lambda x: x[2])
-tweets['latitude_2'] = tweets['coords'].apply(lambda x: x[3])
-
-tweets.drop('bbox', axis=1, inplace=True)
-
-tweets['centroid'] = tweets['coords'].apply(lambda x: find_centroid(x))
-
-tweets['centroid_long'] = tweets['centroid'].apply(lambda z: z.x)
-tweets['centroid_lat'] = tweets['centroid'].apply(lambda z: z.y)
-
-tweets.drop('centroid', axis =1, inplace=True)
-
-# Edge cases
-tweets.loc[tweets.place_name == 'Cape Town, South Africa', ['centroid_long', 'centroid_lat']] = 18.4241, -33.9249
-tweets.loc[tweets.place_name == 'Mdumbi Beach', ['centroid_long', 'centroid_lat']] = 29.215369, -31.933896
-tweets.loc[tweets.place_name == "Betty's Bay, South Africa", ['centroid_long', 'centroid_lat']] = 18.92051, -34.34747
-tweets.loc[tweets.place_name == 'Bloubergstrand', ['centroid_long', 'centroid_lat']] = 18.46173, -33.800418
-
-geometry = [Point(xy) for xy in zip(tweets['centroid_long'], tweets['centroid_lat'])]
-gdf = GeoDataFrame(tweets, geometry=geometry)  
-
-tweets.drop('longitude_1', axis=1, inplace=True)
-tweets.drop('longitude_2', axis=1, inplace=True)
-tweets.drop('latitude_1', axis=1, inplace=True)
-tweets.drop('latitude_2', axis=1, inplace=True)
-tweets.drop('centroid_long', axis=1, inplace=True)
-tweets.drop('centroid_lat', axis=1, inplace=True)
-
-tweets = tweets[tweets['place_name'] != 'South Africa']
-
-tweets.drop('coords', axis=1, inplace=True)
-
-tweets.to_csv('DATA/Clean Tweets.csv')
-
-################################ Content Analysis ################################
-
-tweets['grievances'] = content_analysis(grievances)
-tweets['grievances'] = tweets['grievances'].apply(lambda x: unique_list(x))
-
-tweets['triggers'] = content_analysis(triggers)
-tweets['triggers'] = tweets['triggers'].apply(lambda x: unique_list(x))
-
-tweets['tactics'] = content_analysis(tactics)
-tweets['tactics'] = tweets['tactics'].apply(lambda x: unique_list(x))
-
-tweets['actors'] = content_analysis(actors)
-tweets['actors'] = tweets['actors'].apply(lambda x: unique_list(x))
-
-tweets['locations'] = content_analysis(locations)
-tweets['locations'] = tweets['locations'].apply(lambda x: unique_list(x))
-
-tweets['weapons'] = content_analysis(weapons)
-tweets['weapons'] = tweets['weapons'].apply(lambda x: unique_list(x))
-
-tweets['eventualities'] = content_analysis(eventualities)
-tweets['eventualities'] = tweets['eventualities'].apply(lambda x: unique_list(x))
-
-tweets['curiosities'] = content_analysis(curiosities)
-tweets['curiosities'] = tweets['curiosities'].apply(lambda x: unique_list(x))
-
-tweets['non_protests'] = content_analysis(non_protests)
-tweets['non_protests'] = tweets['non_protests'].apply(lambda x: unique_list(x))
-
-tweets.to_csv('DATA/Tweet Content.csv')
-
-content_table = pd.read_excel('DATA/Protest is SA   SAS rules V2 - Separated.xlsx')
-content_table = content_table.drop('Phrases', axis =1)
-content_table = content_table.drop('Conditional_Phrases', axis =1)
-content_table = content_table.drop('Afrikaans_Phrases', axis =1)
-content_table = content_table.drop('Rule', axis =1)
-content_table['Occurances'] = 0
-
-count_occurances('grievances', 'Grievance')
-count_occurances('triggers', 'Trigger')
-count_occurances('tactics', 'Tactic')
-count_occurances('actors', 'Actors')
-count_occurances('locations', 'Location')
-count_occurances('weapons', 'Weapons')
-count_occurances('eventualities', 'Eventuality')
-count_occurances('curiosities', 'Curiosity')
-count_occurances('non_protests', 'Non-protest')
-
-content_table.to_csv('DATA/Content Table.csv')
-
-total = len(tweets)
-frequency_table = content_table.groupby('Label').Occurances.sum().reset_index()
-frequency_table['Frequency'] = frequency_table['Occurances'].apply(lambda x: round((x/total)*100,2))
-
-frequency_table.to_csv('DATA/Frequency Table.csv')
-
-
-################################ Sentiment Analysis ################################
-
-text = tweets['text'].tolist()
-text = pd.DataFrame(text, columns = ['Text'])
-
-text['Text']=text['Text'].apply(cleanTxt)
-
-text['Subjectivity'] = text['Text'].apply(getSubjectivity)
-text['Polarity'] = text['Text'].apply(getPolarity)
-text['Analysis'] = text['Polarity'].apply(getAnalysis)
-
-
-text.drop(['Text'], axis = 1, inplace = True)
-
-tweets = pd.concat([tweets, text.reindex(tweets.index)], axis = 1)
-
-tweets.to_csv('DATA/Tweet Sentiment.csv')
-
-##################################### University Locations #####################################
-
-universities = pd.read_excel('DATA/South African Universities.xlsx')
-universities['Nickname'] = universities['Nickname'].apply(lambda x: split_string(x))
-universities['Abbriviation'] = universities['Abbriviation'].apply(lambda x: split_string(x))
-tweets['universities'] = university_locator()
-
-change_coords()
-
-tweets.to_csv('DATA/University_Locations.csv')
-
-##################################### Pair Tweet Data to single Protest #####################################
+    tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Tweets.csv')
