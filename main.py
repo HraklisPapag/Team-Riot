@@ -26,6 +26,19 @@ from geopandas import GeoDataFrame
 from shapely.geometry import Point, Polygon
 import folium
 
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import pandas as pd
+from shapely.geometry import Point, Polygon
+import folium
+from shapely.geometry import LineString
+from sympy import centroid
+from geopandas import GeoDataFrame
+# importing geopy library
+from geopy.geocoders import Nominatim
+from numpy import NaN
+from shapely import wkt
+
 from textblob import TextBlob
 from wordcloud import WordCloud
 import pandas as pd
@@ -479,6 +492,25 @@ def concat_lists_to_list(column_name):
                 content_list.append(content)
     return content_list
 
+################################### Tweet Location - Protest Functions  #####################################
+
+# getting the shape file for south africa
+southAfrica = gpd.read_file('DATA\ZA_SHAPES\zaf_adm_sadb_ocha_20201109_SHP\zaf_admbnda_adm0_sadb_ocha_20201109.shp')
+southAfrica = southAfrica[['Shape_Area','ADM0_EN','geometry']]
+southAfrica.rename(columns={'ADM0_EN':'South Africa'}, inplace=True, errors='raise')
+
+# getting the shape file for the provinces
+provinces = gpd.read_file('DATA\ZA_SHAPES\zaf_adm_sadb_ocha_20201109_SHP\zaf_admbnda_adm1_sadb_ocha_20201109.shp')
+provinces = provinces[['Shape_Area','ADM1_EN','geometry']]
+provinces.rename(columns={'ADM1_EN':'Provinces'}, inplace=True, errors='raise')
+
+
+# geting the shape file for municipalities 
+municipalities = gpd.read_file('DATA\ZA_SHAPES\zaf_adm_sadb_ocha_20201109_SHP\zaf_admbnda_adm2_sadb_ocha_20201109.shp')
+municipalities = municipalities[['Shape_Area','ADM2_EN','geometry']]
+municipalities.rename(columns={'ADM2_EN':'Municipalities'}, inplace=True, errors='raise')
+
+
 #############################################################################################################
 ################################################ MAIN METHOD ################################################
 #############################################################################################################
@@ -513,10 +545,29 @@ protests_origin = pd.read_csv('DATA/Student Protests.csv')
 protests_origin.drop('Unnamed: 0', axis =1, inplace =True)
 protests_origin['event_date'] = protests_origin['event_date'].apply(lambda x: string_to_date(x))
 
-protests = protests_origin.head(10)
+protests = protests_origin.head(20)
 
+protests = gpd.GeoDataFrame(protests, geometry=gpd.points_from_xy(protests.longitude, protests.latitude))
+
+points = protests['geometry']
+shapes = municipalities['geometry']
+places = [NaN]*len(protests)
+
+for i, point in enumerate(points):
+    temp = shapes.contains(point)
+    temp = temp.tolist()
+    if True in temp:
+        loc = temp.index(True)
+        place = municipalities.iloc[loc,1]
+        places[i] = place
+
+protests['place'] = places
 
 for iter_p, protest in protests.iterrows():
+
+    protest_place = protest['place']
+    print(protest_place)
+
     date = protest['event_date']
     date_before = date - datetime.timedelta(days=1)
     date_after = date + datetime.timedelta(days=1)
@@ -683,13 +734,35 @@ for iter_p, protest in protests.iterrows():
     universities['Abbriviation'] = universities['Abbriviation'].apply(lambda x: split_string(x))
     tweets['universities'] = university_locator()
 
-    change_coords()
+    #change_coords()
 
     # tweets.to_csv('DATA/Tweets-Protests/' + directory +  '/University_Locations.csv')
+
+    ################################### Find Location of Tweets in Protest  #####################################
+
+    points = tweets['geometry']
+    shapes = municipalities['geometry']
+    places = [NaN]*len(tweets)
+
+    for i, point in enumerate(points):
+        temp = shapes.contains(point)
+        temp = temp.tolist()
+        if True in temp:
+            loc = temp.index(True)
+            place = municipalities.iloc[loc,1]
+            places[i] = place
+
+    tweets['place'] = places
+
+
+    tweets = tweets[tweets['place'] == protest_place]
 
     ##################################### Pair Tweet Data to single Protest #####################################
 
     tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Tweets.csv')
+
+    
+
 
 
     ##################################### Aggregate Tweets into final df #####################################
@@ -751,8 +824,5 @@ for iter_p, protest in protests.iterrows():
                                                                       'mode curiosity': [curiosities_mode],
                                                                       'mode non_protest': [non_protests_mode],
                                                                       'mode universities': [universities_mode]})])
-
-   
-
 
 aggregate_protests.to_csv('DATA/Aggregate Protests.csv')
