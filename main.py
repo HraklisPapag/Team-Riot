@@ -521,6 +521,7 @@ query_df = pd.read_excel('DATA/Protest-Query.xlsx')
 query = create_query(query_df)
 
 aggregate_protests = pd.DataFrame(columns=['num tweets', 
+                                           'tweet_num_before',
                                            'total quotes', 
                                            'total retweets', 
                                            'total replies', 
@@ -536,16 +537,18 @@ aggregate_protests = pd.DataFrame(columns=['num tweets',
                                            'mode eventuality',
                                            'mode curiosity',
                                            'mode non_protest',
-                                           'mode universities'])
-
+                                           'mode universities',
+                                           'place',
+                                           'start_date',
+                                           'end_date'])
 
 ################################ Initialise Protest ################################
 
-protests_origin = pd.read_csv('DATA/Student Protests.csv')
+protests_origin = pd.read_csv('DATA/fmf.csv')
 protests_origin.drop('Unnamed: 0', axis =1, inplace =True)
 protests_origin['event_date'] = protests_origin['event_date'].apply(lambda x: string_to_date(x))
 
-protests = protests_origin.head(20)
+protests = protests_origin.head(10)
 
 protests = gpd.GeoDataFrame(protests, geometry=gpd.points_from_xy(protests.longitude, protests.latitude))
 
@@ -566,7 +569,6 @@ protests['place'] = places
 for iter_p, protest in protests.iterrows():
 
     protest_place = protest['place']
-    print(protest_place)
 
     date = protest['event_date']
     date_before = date - datetime.timedelta(days=1)
@@ -734,7 +736,7 @@ for iter_p, protest in protests.iterrows():
     universities['Abbriviation'] = universities['Abbriviation'].apply(lambda x: split_string(x))
     tweets['universities'] = university_locator()
 
-    #change_coords()
+    change_coords()
 
     # tweets.to_csv('DATA/Tweets-Protests/' + directory +  '/University_Locations.csv')
 
@@ -754,8 +756,8 @@ for iter_p, protest in protests.iterrows():
 
     tweets['place'] = places
 
-
-    tweets = tweets[tweets['place'] == protest_place]
+    tweet_num_before = len(tweets)
+    # tweets = tweets[tweets['place'] == protest_place]
 
     ##################################### Pair Tweet Data to single Protest #####################################
 
@@ -808,6 +810,7 @@ for iter_p, protest in protests.iterrows():
 
 
     aggregate_protests = pd.concat([aggregate_protests, pd.DataFrame({'num tweets': [num_tweets],
+                                                                      'tweet_num_before': [tweet_num_before],
                                                                       'total quotes': [total_quotes], 
                                                                       'total retweets': [total_retweets], 
                                                                       'total replies': [total_replies], 
@@ -823,6 +826,10 @@ for iter_p, protest in protests.iterrows():
                                                                       'mode eventuality': [eventualities_mode],
                                                                       'mode curiosity': [curiosities_mode],
                                                                       'mode non_protest': [non_protests_mode],
-                                                                      'mode universities': [universities_mode]})])
+                                                                      'mode universities': [universities_mode],
+                                                                      'place': [protest_place],
+                                                                      'start_date': [date_before],
+                                                                      'end_date': [date_after]})])
+
 
 aggregate_protests.to_csv('DATA/Aggregate Protests.csv')

@@ -1,21 +1,11 @@
-,num tweets,total quotes,total retweets,total replies,total likes,mean subjectivity,mean polarity,mode grievance,mode trigger,mode tactic,mode actor,mode location,mode weapon,mode eventuality,mode curiosity,mode non_protest,mode universities
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,1,0,0,0,1,0.5833333333333334,0.3666666666666667,['Mining'],[],['Attack'],[],['School'],[],[],[],[],[]
-0,5,2,5,6,12,0.4770357142857143,0.0877099567099567,['Education'],[],['Gathering'],['Political Party'],['Tertiary Edu'],[],[],[],['Election days'],"['University of Johannesburg', 'Stellenbosh University']"
-0,3,1,16,2,31,0.5166666666666666,-0.15,"['Education', 'National govt']",[],[],['Political Party'],['Tertiary Edu'],['Police weapons'],[],[],['Election days'],['University of Limpopo']
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,2,0,7,2,5,0.22499999999999998,0.15000000000000002,"['Proposed legislation', 'Education']",[],"['Vandalism', 'Meeting']",[],"['Tertiary Edu', 'Informal area']",[],[],[],['Election campaigns'],['University of Pretoria']
-0,2,0,7,2,5,0.22499999999999998,0.15000000000000002,"['Proposed legislation', 'Education']",[],"['Vandalism', 'Meeting']",[],"['Tertiary Edu', 'Informal area']",[],[],[],['Election campaigns'],['University of Pretoria']
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,2,0,0,0,11,0.30833333333333335,0.29166666666666663,[],[],[],['Political Party'],[],['Police weapons'],[],[],[],['University of Cape Town ']
-0,1,0,3,2,12,0.1,-0.1,"['Healthcare', 'Education']",[],[],[],['School'],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
-0,0,0,0,0,0,,,[],[],[],[],[],[],[],[],[],[]
+,num tweets,tweet_num_before,total quotes,total retweets,total replies,total likes,mean subjectivity,mean polarity,mode grievance,mode trigger,mode tactic,mode actor,mode location,mode weapon,mode eventuality,mode curiosity,mode non_protest,mode universities,place,start_date,end_date
+0,60,60,29,121,32,122,0.3206836419753086,0.06912962962962964,['Education'],"['Arrests', 'Working conditions', 'Project begin']",['March'],['Political Party'],['Tertiary Edu'],[],[],[],['Election campaigns'],['University of Cape Town '],City of Cape Town,2017-10-24 00:00:00,2017-10-26 00:00:00
+0,18,18,3,14,5,33,0.3673148148148148,0.0762037037037037,['Education'],['Working conditions'],['Disrupt'],['Political Party'],['Tertiary Edu'],[],[],[],"['Election campaigns', 'Exhibitions']",['University of the Witwatersrand'],City of Cape Town,2017-09-18 00:00:00,2017-09-20 00:00:00
+0,5,5,1,11,0,11,0.5124526515151515,0.13049242424242424,['Education'],[],"['Gathering', 'Writter']",['Political Party'],['School'],[],[],[],['Taxi violence'],[],City of Cape Town,2017-06-18 00:00:00,2017-06-20 00:00:00
+0,24,24,5,38,6,19,0.35875,0.191875,['Education'],"['Working conditions', 'Arrests', 'Crime Event']",['March'],['Political Party'],['Tertiary Edu'],[],[],[],['Election campaigns'],['University of the Witwatersrand'],eThekwini,2017-02-23 00:00:00,2017-02-25 00:00:00
+0,20,20,20,17,11,15,0.31434953703703705,0.11155324074074076,"['Social grants', 'Labour related', 'Ratepayers abuse']",[],['Gathering'],['Political Party'],['Tertiary Edu'],[],[],['Special Keywords'],"['Exhibitions', 'Election campaigns']",['University of Pretoria'],eThekwini,2017-01-18 00:00:00,2017-01-20 00:00:00
+0,17,17,5,9,6,9,0.4257936507936508,0.13735119047619046,"['Services A', 'National govt']",['Working conditions'],['Gathering'],['Political Party'],['School'],[],[],[],"['Election campaigns', 'Exhibitions']",[],City of Cape Town,2016-11-23 00:00:00,2016-11-25 00:00:00
+0,5,5,2,0,3,0,0.47222222222222227,0.20555555555555557,['Education'],[],"['Writter', 'Gathering', 'Lock-out', 'Disrupt']",['Political Party'],['Tertiary Edu'],[],[],['Movements'],[],['University of the Free State'],City of Tshwane,2016-11-20 00:00:00,2016-11-22 00:00:00
+0,6,6,1,1,5,4,0.5936363636363637,0.12353535353535354,['Education'],[],"['Lock-out', 'Disrupt']",['Political Party'],['Tertiary Edu'],[],[],['Movements'],['Election campaigns'],['University of Cape Town '],City of Tshwane,2016-11-19 00:00:00,2016-11-21 00:00:00
+0,16,16,2,11,10,27,0.28242187500000004,0.09817708333333335,"['Housing', 'Education']","['Working conditions', 'Wage disputes']",['Gathering'],['Political Party'],['Tertiary Edu'],[],[],[],['Election days'],['University of the Witwatersrand'],City of Cape Town,2016-11-13 00:00:00,2016-11-15 00:00:00
+0,10,10,0,4,2,6,0.6459722222222223,0.29847222222222225,"['Education', 'Labour related']","['Court hearing', 'Arrests']","['Lock-out', 'Disrupt']",['Political Party'],['School'],[],[],[],['Taxi violence'],['Central University of Technology'],City of Cape Town,2016-11-06 00:00:00,2016-11-08 00:00:00
