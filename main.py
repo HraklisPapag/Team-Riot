@@ -757,7 +757,7 @@ for iter_p, protest in protests.iterrows():
     tweets['place'] = places
 
     tweet_num_before = len(tweets)
-    # tweets = tweets[tweets['place'] == protest_place]
+    tweets = tweets[tweets['place'] == protest_place]
 
     ##################################### Pair Tweet Data to single Protest #####################################
 
