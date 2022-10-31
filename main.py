@@ -461,9 +461,23 @@ def change_coords():
 
 ################################################ MAIN METHOD ################################################
 
+
+
+
+
 ################################ Create Query ################################
 query_df = pd.read_excel('DATA/Protest-Query.xlsx')
 query = create_query(query_df)
+
+
+
+
+
+
+################################ Initialise Protest ################################
+
+
+
 
 ################################ Scrape Tweets ################################
 bearer_token = 'AAAAAAAAAAAAAAAAAAAAAEGchQEAAAAAZSYFv1nyLDV81YAKEfDr1fVrlho%3DWKBvyLhQ4CeHrlBRtecAetYkB1ZnAjI3Zydb1516fkIzKhS4vh'
@@ -621,3 +635,5 @@ tweets['universities'] = university_locator()
 change_coords()
 
 tweets.to_csv('DATA/University_Locations.csv')
+
+##################################### Pair Tweet Data to single Protest #####################################
