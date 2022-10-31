@@ -752,25 +752,7 @@ for iter_p, protest in protests.iterrows():
                                                                       'mode non_protest': [non_protests_mode],
                                                                       'mode universities': [universities_mode]})])
 
-    # aggregate_protests = aggregate_protests.append({'num tweets': num_tweets, 
-    #                                              'total quotes': [total_quotes], 
-    #                                              'total retweets': [total_retweets], 
-    #                                              'total replies': [total_replies], 
-    #                                              'total likes': [total_likes], 
-    #                                              'mean subjectivity': [mean_subjectivity], 
-    #                                              'mean polarity': [mean_polarity],
-    #                                              'mode grievance': [greivance_mode],
-    #                                              'mode trigger': [triggers_mode],
-    #                                              'mode tactic': [tactics_mode],
-    #                                              'mode actor': [actors_mode],
-    #                                              'mode location': [locations_mode],
-    #                                              'mode weapon': [weapons_mode],
-    #                                              'mode eventuality': [eventualities_mode],
-    #                                              'mode curiosity': [curiosities_mode],
-    #                                              'mode non_protest': [non_protests_mode],
-    #                                              'mode universities': [universities_mode]})
-
-    
+   
 
 
 aggregate_protests.to_csv('DATA/Aggregate Protests.csv')
