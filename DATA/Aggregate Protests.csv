@@ -1,0 +1,4 @@
+,num tweets,total quotes,total retweets,total replies,total likes,mean subjectivity,mean polarity,mode grievance,mode trigger,mode tactic,mode actor,mode location,mode weapon,mode eventuality,mode curiosity,mode non_protest,mode universities
+0,6,6,35,10,111,0.420028409,0.211505682,"['Foreigners', 'Housing', 'Healthcare', 'Electricity']","['Dismissals', 'Utility connections']",['Picket'],['Political Party'],['Tertiary Edu'],['Police weapons'],[],['Special Keywords'],"['Election days', 'Other sport', 'Election campaigns']",['University of the Witwatersrand']
+1,5,0,1,6,11,0.422815657,-0.090606061,"['Social grants', 'Healthcare', 'Demarcation', 'Internat Solidarity', 'Mining', 'Education']",['Working conditions'],['Disrupt'],['Political Party'],['School'],['Crowd weapons'],[],[],['Election campaigns'],[]
+2,8,3,52,12,241,0.374440322,0.147617502,['Mining'],[],['Boycott'],['Political Party'],['Tertiary Edu'],[],[],[],['Election days'],['University of Cape Town ']

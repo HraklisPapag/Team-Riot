@@ -32,6 +32,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
+from statistics import multimode
 
 ######################## Create Query Functions ###########################
 
@@ -463,6 +464,18 @@ def string_to_date(date_str):
     date_time_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
     return date_time_obj
 
+
+
+########################## Aggregate Functions  #############################
+
+def concat_lists_to_list(column_name):
+    content_list  = []
+    for iter_t, tweet in tweets.iterrows():
+        if tweet[column_name] == tweet[column_name]:
+            for content in tweet[column_name]:
+                content_list.append(content)
+    return content_list
+
 #############################################################################################################
 ################################################ MAIN METHOD ################################################
 #############################################################################################################
@@ -472,6 +485,24 @@ def string_to_date(date_str):
 query_df = pd.read_excel('DATA/Protest-Query.xlsx')
 query = create_query(query_df)
 
+aggregate_protests = pd.DataFrame(columns=['num tweets', 
+                                           'total quotes', 
+                                           'total retweets', 
+                                           'total replies', 
+                                           'total likes', 
+                                           'mean subjectivity', 
+                                           'mean polarity',
+                                           'mode grievance',
+                                           'mode trigger',
+                                           'mode tactic',
+                                           'mode actor',
+                                           'mode location',
+                                           'mode weapon',
+                                           'mode eventuality',
+                                           'mode curiosity',
+                                           'mode non_protest',
+                                           'mode universities'])
+
 
 ################################ Initialise Protest ################################
 
@@ -479,8 +510,7 @@ protests_origin = pd.read_csv('DATA/Student Protests.csv')
 protests_origin.drop('Unnamed: 0', axis =1, inplace =True)
 protests_origin['event_date'] = protests_origin['event_date'].apply(lambda x: string_to_date(x))
 
-protests = protests_origin.head(10)
-print(protests)
+protests = protests_origin.head(3)
 
 
 for iter_p, protest in protests.iterrows():
@@ -657,3 +687,69 @@ for iter_p, protest in protests.iterrows():
     ##################################### Pair Tweet Data to single Protest #####################################
 
     tweets.to_csv('DATA/Tweets-Protests/' + directory + '/Tweets.csv')
+
+
+    ##################################### Aggregate Tweets into final df #####################################
+
+    num_tweets = len(tweets)
+    total_quotes = tweets['quote_count'].sum()
+    total_retweets = tweets['retweets'].sum()
+    total_replies = tweets['replies'].sum()
+    total_likes = tweets['likes'].sum()
+
+    mean_subjectivity = tweets['Subjectivity'].mean()
+    mean_polarity = tweets['Polarity'].mean()
+
+    grievance_list = concat_lists_to_list('grievances')
+    greivance_mode = multimode(grievance_list)
+
+    triggers_list = concat_lists_to_list('triggers')
+    triggers_mode = multimode(triggers_list)
+
+    tactics_list = concat_lists_to_list('tactics')
+    tactics_mode = multimode(tactics_list)
+
+    actors_list = concat_lists_to_list('actors')
+    actors_mode = multimode(actors_list)
+
+    locations_list = concat_lists_to_list('locations')
+    locations_mode = multimode(locations_list)
+
+    weapons_list = concat_lists_to_list('weapons')
+    weapons_mode = multimode(weapons_list)
+
+    eventualities_list = concat_lists_to_list('eventualities')
+    eventualities_mode = multimode(eventualities_list)
+
+    curiosities_list = concat_lists_to_list('curiosities')
+    curiosities_mode = multimode(curiosities_list)
+
+    non_protests_list = concat_lists_to_list('non_protests')
+    non_protests_mode = multimode(non_protests_list)
+
+    universities_list = concat_lists_to_list('universities')
+    universities_mode = multimode(universities_list)
+
+
+    aggregate_protests = aggregate_protests.append({'num tweets': num_tweets, 
+                                                 'total quotes': total_quotes, 
+                                                 'total retweets': total_retweets, 
+                                                 'total replies': total_replies, 
+                                                 'total likes': total_likes, 
+                                                 'mean subjectivity': mean_subjectivity, 
+                                                 'mean polarity': mean_polarity,
+                                                 'mode grievance': greivance_mode,
+                                                 'mode trigger': triggers_mode,
+                                                 'mode tactic': tactics_mode,
+                                                 'mode actor': actors_mode,
+                                                 'mode location': locations_mode,
+                                                 'mode weapon': weapons_mode,
+                                                 'mode eventuality': eventualities_mode,
+                                                 'mode curiosity': curiosities_mode,
+                                                 'mode non_protest': non_protests_mode,
+                                                 'mode universities': universities_mode}, ignore_index = True)
+
+    
+
+
+aggregate_protests.to_csv('DATA/Aggregate Protests.csv')
