@@ -34,6 +34,9 @@ import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
 from statistics import multimode
 
+import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
+
 ######################## Create Query Functions ###########################
 
 def list_to_or(l):
@@ -510,7 +513,7 @@ protests_origin = pd.read_csv('DATA/Student Protests.csv')
 protests_origin.drop('Unnamed: 0', axis =1, inplace =True)
 protests_origin['event_date'] = protests_origin['event_date'].apply(lambda x: string_to_date(x))
 
-protests = protests_origin.head(3)
+protests = protests_origin.head(10)
 
 
 for iter_p, protest in protests.iterrows():
@@ -731,23 +734,41 @@ for iter_p, protest in protests.iterrows():
     universities_mode = multimode(universities_list)
 
 
-    aggregate_protests = aggregate_protests.append({'num tweets': num_tweets, 
-                                                 'total quotes': total_quotes, 
-                                                 'total retweets': total_retweets, 
-                                                 'total replies': total_replies, 
-                                                 'total likes': total_likes, 
-                                                 'mean subjectivity': mean_subjectivity, 
-                                                 'mean polarity': mean_polarity,
-                                                 'mode grievance': greivance_mode,
-                                                 'mode trigger': triggers_mode,
-                                                 'mode tactic': tactics_mode,
-                                                 'mode actor': actors_mode,
-                                                 'mode location': locations_mode,
-                                                 'mode weapon': weapons_mode,
-                                                 'mode eventuality': eventualities_mode,
-                                                 'mode curiosity': curiosities_mode,
-                                                 'mode non_protest': non_protests_mode,
-                                                 'mode universities': universities_mode}, ignore_index = True)
+    aggregate_protests = pd.concat([aggregate_protests, pd.DataFrame({'num tweets': [num_tweets],
+                                                                      'total quotes': [total_quotes], 
+                                                                      'total retweets': [total_retweets], 
+                                                                      'total replies': [total_replies], 
+                                                                      'total likes': [total_likes], 
+                                                                      'mean subjectivity': [mean_subjectivity], 
+                                                                      'mean polarity': [mean_polarity],
+                                                                      'mode grievance': [greivance_mode],
+                                                                      'mode trigger': [triggers_mode],
+                                                                      'mode tactic': [tactics_mode],
+                                                                      'mode actor': [actors_mode],
+                                                                      'mode location': [locations_mode],
+                                                                      'mode weapon': [weapons_mode],
+                                                                      'mode eventuality': [eventualities_mode],
+                                                                      'mode curiosity': [curiosities_mode],
+                                                                      'mode non_protest': [non_protests_mode],
+                                                                      'mode universities': [universities_mode]})])
+
+    # aggregate_protests = aggregate_protests.append({'num tweets': num_tweets, 
+    #                                              'total quotes': [total_quotes], 
+    #                                              'total retweets': [total_retweets], 
+    #                                              'total replies': [total_replies], 
+    #                                              'total likes': [total_likes], 
+    #                                              'mean subjectivity': [mean_subjectivity], 
+    #                                              'mean polarity': [mean_polarity],
+    #                                              'mode grievance': [greivance_mode],
+    #                                              'mode trigger': [triggers_mode],
+    #                                              'mode tactic': [tactics_mode],
+    #                                              'mode actor': [actors_mode],
+    #                                              'mode location': [locations_mode],
+    #                                              'mode weapon': [weapons_mode],
+    #                                              'mode eventuality': [eventualities_mode],
+    #                                              'mode curiosity': [curiosities_mode],
+    #                                              'mode non_protest': [non_protests_mode],
+    #                                              'mode universities': [universities_mode]})
 
     
 
