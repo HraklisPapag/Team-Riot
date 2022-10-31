@@ -470,11 +470,11 @@ query_df = pd.read_excel('DATA/Protest-Query.xlsx')
 query = create_query(query_df)
 
 
-
-
-
-
 ################################ Initialise Protest ################################
+
+protests = pd.read_csv('DATA/Student Protests.csv')
+
+
 
 
 
