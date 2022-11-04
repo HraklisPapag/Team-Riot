@@ -1,93 +1,93 @@
 ,Label,Concept,Occurances
-0,Grievance,Capitalism,70
-1,Grievance,Values,2778
-2,Grievance,Conditions,1921
-3,Grievance,Contract end,60
-4,Grievance,Community recognition,66
-5,Grievance,Demolitions,211
-6,Grievance,Education,6424
-7,Grievance,Election outcome,174
-8,Grievance,Electricity,1971
-9,Grievance,Labour related,1998
-10,Grievance,Foreigners,626
-11,Grievance,Healthcare,826
-12,Grievance,Housing,2207
-13,Grievance,International Solidarity,238
-14,Grievance,Intimidation by criminal,3
-15,Grievance,Judicial,212
-16,Grievance,Labour brokers,5
-17,Grievance,Licencing,181
-18,Grievance,Mining,2591
-19,Grievance,Muncipal disengage,59
-20,Grievance,Municipal services,20
-21,Grievance,National govt,3122
-22,Grievance,Food inspectors,32
-23,Grievance,Libraries,250
-24,Grievance,Police,1420
-25,Grievance,Disaster response,392
-26,Grievance,Services A,700
-27,Grievance,Services B,137
-28,Grievance,Proposed legislation,398
-29,Grievance,Demarcation,124
-30,Grievance,Premier,157
-31,Grievance,Social grants,380
-32,Grievance,Traditional governance,39
-33,Grievance,Ratepayers abuse,174
-34,Grievance,Witchcraft,258
-35,Grievance,Women's empowerment,67
-36,Trigger,Court hearing,4264
-37,Trigger,Project begin,649
-38,Trigger,National Strike,191
-39,Trigger,Dismissals,504
-40,Trigger,Wage disputes,776
-41,Trigger,Evictions,139
-42,Trigger,Utility connections,1899
-43,Trigger,Election related,33
-44,Trigger,Non consultation,6
-45,Trigger,Working conditions,2908
-46,Trigger,Arrests,2119
-47,Trigger,Crime Event,1698
-48,Trigger,Neoliberal logic,56
-49,Tactic,Hostage,66
-50,Tactic,Attack,5479
-51,Tactic,Disrupt,8904
-52,Tactic,M&M,34
-53,Tactic,Vandalism,1973
-54,Tactic,Lock-out,4361
-55,Tactic,March,4147
-56,Tactic,Meeting,1014
-57,Tactic,Picket,1594
-58,Tactic,Demonstration,386
-59,Tactic,Gathering,11848
-60,Tactic,Vigil,72
-61,Tactic,Writter,786
-62,Tactic,Boycott,114
-63,Actors,Union,735
-64,Actors,Political Party,12690
-65,Actors,Civic org,1484
-66,Actors,Church,276
-67,Location,Informal area,4422
-68,Location,Court,4264
-69,Location,Business premises,2052
-70,Location,Stadium,387
-71,Location,Church,509
-72,Location,School,10995
-73,Location,Tertiary Edu,11606
-74,Weapons,Crowd weapons,199
-75,Weapons,Crowd projectiles,238
-76,Weapons,Police weapons,2120
-77,Eventuality,Police attack,839
-78,Eventuality,Vigilantism,7
-79,Curiosity,Movements,489
-80,Curiosity,Special Keywords,2487
-81,Non-protest,Football matches,757
-82,Non-protest,Other sport,2256
-83,Non-protest,Tribal court meetings,27
-84,Non-protest,Funerals,336
-85,Non-protest,Church,182
-86,Non-protest,Election campaigns,4388
-87,Non-protest,Election debates,224
-88,Non-protest,Election days,1789
-89,Non-protest,Taxi violence,434
-90,Non-protest,16 Days of activism,2886
-91,Non-protest,Exhibitions,1850
+0,Grievance,Capitalism,16
+1,Grievance,Values,156
+2,Grievance,Conditions,200
+3,Grievance,Contract end,6
+4,Grievance,Community recognition,16
+5,Grievance,Demolitions,53
+6,Grievance,Education,2521
+7,Grievance,Election outcome,13
+8,Grievance,Electricity,227
+9,Grievance,Labour related,376
+10,Grievance,Foreigners,20
+11,Grievance,Healthcare,79
+12,Grievance,Housing,320
+13,Grievance,International Solidarity,29
+14,Grievance,Intimidation by criminal,1
+15,Grievance,Judicial,30
+16,Grievance,Labour brokers,2
+17,Grievance,Licencing,3
+18,Grievance,Mining,270
+19,Grievance,Muncipal disengage,8
+20,Grievance,Municipal services,1
+21,Grievance,National govt,705
+22,Grievance,Food inspectors,0
+23,Grievance,Libraries,96
+24,Grievance,Police,233
+25,Grievance,Disaster response,37
+26,Grievance,Services A,83
+27,Grievance,Services B,13
+28,Grievance,Proposed legislation,27
+29,Grievance,Demarcation,14
+30,Grievance,Premier,25
+31,Grievance,Social grants,71
+32,Grievance,Traditional governance,4
+33,Grievance,Ratepayers abuse,32
+34,Grievance,Witchcraft,9
+35,Grievance,Women's empowerment,3
+36,Trigger,Court hearing,533
+37,Trigger,Project begin,155
+38,Trigger,National Strike,58
+39,Trigger,Dismissals,114
+40,Trigger,Wage disputes,107
+41,Trigger,Evictions,41
+42,Trigger,Utility connections,226
+43,Trigger,Election related,6
+44,Trigger,Non consultation,1
+45,Trigger,Working conditions,319
+46,Trigger,Arrests,470
+47,Trigger,Crime Event,152
+48,Trigger,Neoliberal logic,13
+49,Tactic,Hostage,10
+50,Tactic,Attack,354
+51,Tactic,Disrupt,1336
+52,Tactic,M&M,7
+53,Tactic,Vandalism,195
+54,Tactic,Lock-out,300
+55,Tactic,March,710
+56,Tactic,Meeting,250
+57,Tactic,Picket,379
+58,Tactic,Demonstration,50
+59,Tactic,Gathering,1380
+60,Tactic,Vigil,11
+61,Tactic,Writter,126
+62,Tactic,Boycott,9
+63,Actors,Union,199
+64,Actors,Political Party,1665
+65,Actors,Civic org,192
+66,Actors,Church,24
+67,Location,Informal area,1830
+68,Location,Court,533
+69,Location,Business premises,225
+70,Location,Stadium,32
+71,Location,Church,48
+72,Location,School,2397
+73,Location,Tertiary Edu,5393
+74,Weapons,Crowd weapons,21
+75,Weapons,Crowd projectiles,53
+76,Weapons,Police weapons,288
+77,Eventuality,Police attack,156
+78,Eventuality,Vigilantism,0
+79,Curiosity,Movements,163
+80,Curiosity,Special Keywords,468
+81,Non-protest,Football matches,78
+82,Non-protest,Other sport,156
+83,Non-protest,Tribal court meetings,6
+84,Non-protest,Funerals,41
+85,Non-protest,Church,21
+86,Non-protest,Election campaigns,670
+87,Non-protest,Election debates,52
+88,Non-protest,Election days,335
+89,Non-protest,Taxi violence,43
+90,Non-protest,16 Days of activism,165
+91,Non-protest,Exhibitions,175
